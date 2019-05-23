@@ -24,7 +24,7 @@ def checkIfJumpable():
 
 
 
-def findPiece(piece):
+def findPiece(piece,board):
     pos=0
 
     for i in range(64):
@@ -36,9 +36,23 @@ def findPiece(piece):
             pos+=1
 
 
-def movpiece(pos,eat):
+def movpiece(pos,targetPos,eat,board,piece):
+    n=8
+    #pos is where piece is located
+    #targetPos can either be left: 0 or right:1 or eatleft:2 or eatRight:3 or doubleTrip..ec eat: 4
+
+    col = pos % n
+    row = pos // n
     if eat == 0:
-        pass
+        if targetPos == 0:
+            board[row][col]=0
+            board[row-1][col-1]= piece
+        elif targetPos == 1:
+            board[row][col] = 0
+            board[row - 1][col + 1] = piece
+    return board
+
+
 
 
 
@@ -136,14 +150,24 @@ def startingBoard(pos,n):
 
 
 if __name__ == "__main__":
-
+    end = False
     n = 8
     board= np.zeros([n,n], dtype= bool)
     # gameBoard = [[False] * 8 for _ in range(8)]  # Proper initialization.
 
     p = startingBoard(0,8)
     boolBoard = p[0]
-    viewBoard = p[1]
-    print(p)
+    gameBoard = p[1]
+    print(p[1])
+
+
+    while end == False:
+        piece =input("Which piece you want to move")
+        pos = findPiece(int(piece),gameBoard)
+        direction = input("left:0 or right:1?")
+
+        new = movpiece(pos, int(direction), 0, gameBoard, piece)
+        gameBoard = new
+        print(gameBoard)
 
 
