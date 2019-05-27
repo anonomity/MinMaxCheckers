@@ -13,8 +13,16 @@ if __name__ == "__main__":
 
         piece =input("Which piece you want to move\n")
         print(" ")
-        direction = input("left:0 or right:1?\n")
-        gameboard.mov(int(piece),int(direction))
+        direction = int(input("left:0 , right:1, or jump:2?\n"))
+
+        print(" ")
+        if direction ==2:
+            dir = input("which direction?\n")
+            print(" ")
+            amount = input("how many jumps?\n")
+            gameboard.jump(int(piece),int(dir),int(amount))
+        else:
+            gameboard.mov(int(piece), direction)
         gameboard.AiMove()
 
 

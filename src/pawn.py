@@ -12,6 +12,7 @@ class pawn():
         self.posBoard = posBoard
 
     def checkEmpty(self,row,col):
+
         if self.gameboard[row][col]==0:
             return 1
         elif self.gameboard[row][col]!=0:
@@ -62,9 +63,41 @@ class pawn():
     def update(self,row,col):
         newPosition =self.posBoard[row][col]
         self.pos = newPosition
+
     def getPos(self):
         return self.pos
 
+    def checkOpponent(self, row, col):
+        if self.gameboard[row][col] == 0:
+            return 0
+        elif (self.gameboard[row][col] > 0) & (self.gameboard[row][col] < 13):
+            return 1
+
+    def checkHuman(self,row,col):
+        if self.gameboard[row][col] == 0:
+            return 0
+        elif self.gameboard[row][col] > 12:
+            return 1
+
     def jump(self,destination,amount):
-        pass
+        col = self.pos % 8
+        row = self.pos // 8
+        if destination == 0:
+            if (self.checkEmpty(row-2,col-2)) & (self.checkOpponent(row-1,col-1)):
+                self.gameboard[row][col] = 0
+                self.gameboard[row - 1][col - 1] = 0
+                self.gameboard[row - 2][col - 2] = self.number
+                p = self.posBoard[row - 2][col - 2]
+                self.pos = p
+            else:
+                print("unable to move to that location\n")
+        elif destination ==1:
+            if (self.checkEmpty(row - 2, col + 2)) & (self.checkOpponent(row - 1, col + 1)):
+                self.gameboard[row][col] = 0
+                self.gameboard[row-1][col+1] = 0
+                self.gameboard[row - 2][col + 2] = self.number
+                p = self.posBoard[row - 2][col - 2]
+                self.pos = p
+            else:
+                print("unable to move to that location\n")
 

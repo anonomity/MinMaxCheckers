@@ -121,7 +121,9 @@ class board():
         self.board = board
 
 
-
+    def jump(self,piece, direction, amount):
+        piece = self.pawns[piece-1]
+        piece.jump(direction,amount)
 
     def printPawns(self):
         for i in range(self.pawns.__len__()):
@@ -137,24 +139,42 @@ class board():
         while found ==False:
             rpawn = random.randint(1,12)
             destination = random.randint(0,1)
-            pos =  self.pawns[rpawn].getPos()
+            pos =  self.pawns[rpawn-1].getPos()
             col = pos % 8
             row = pos // 8
             if destination ==0:
-                if self.pawns[rpawn].checkEmpty(row+1,col-1):
+                if self.pawns[rpawn-1].checkEmpty(row+1,col-1):
                     self.board[row][col] = 0
                     self.board[row+1][col-1] = rpawn
-                    self.pawns[rpawn].update(row+1,col-1)
+                    self.pawns[rpawn-1].update(row+1,col-1)
                     found = True
                     self.HumanView()
+                #check if human is there so it can eat
+                elif self.pawns[rpawn-1].checkHuman(row+1,col-1):
+                    #check if space is empty
+                    if self.pawns[rpawn-1].checkEmpty(row+2,col-2):
+                        self.pawns[rpawn - 1].update(row+2,col-2)
+                        self.board[row][col] = 0
+                        self.board[row + 1][col - 1] = 0
+                        self.board[row + 2][col - 2] = rpawn
+                    else:
+                        pass
                 else:
                     pass
             elif destination ==1:
-                if self.pawns[rpawn].checkEmpty(row+1,col+1):
+                if self.pawns[rpawn-1].checkEmpty(row+1,col+1):
                     self.board[row][col] = 0
                     self.board[row + 1][col + 1] = rpawn
-                    self.pawns[rpawn].update(row + 1, col + 1)
+                    self.pawns[rpawn-1].update(row + 1, col + 1)
                     found = True
                     self.HumanView()
+                elif self.pawns[rpawn-1].checkHuman(row+1,col+1):
+                    if self.pawns[rpawn - 1].checkEmpty(row + 2, col + 2):
+                        self.pawns[rpawn - 1].update(row + 2, col + 2)
+                        self.board[row][col] = 0
+                        self.board[row + 1][col + 1] = 0
+                        self.board[row + 2][col + 2] = rpawn
+                    else:
+                        pass
                 else:
                     pass
