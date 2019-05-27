@@ -1,5 +1,7 @@
 import numpy as np
 from pawn import pawn
+import copy
+import random
 
 class board():
 
@@ -98,11 +100,11 @@ class board():
 
     def HumanView(self):
         pos = 0
+        humanView = copy.deepcopy(self.board)
         for i in range(64):
             col = pos % 8
             row = pos // 8
-            humanView = self.board
-            if (self.board[row][col] < 13) & (self.board[row][col] != 0) :
+            if (humanView[row][col] < 13) & (humanView[row][col] != 0) :
 
                 humanView[row][col]=69
                 pos+=1
@@ -119,15 +121,40 @@ class board():
         self.board = board
 
 
+
+
     def printPawns(self):
         for i in range(self.pawns.__len__()):
             print(i)
 
     def mov(self,number,dir):
         piece = self.pawns[number-1]
-        newboard = piece.mov(dir)
-        self.board = newboard[0]
-        self.posBoard = newboard[1]
+        piece.mov(dir)
         self.HumanView()
 
-    def AiMov(self):
+    def AiMove(self):
+        found = False
+        while found ==False:
+            rpawn = random.randint(1,12)
+            destination = random.randint(0,1)
+            pos =  self.pawns[rpawn].getPos()
+            col = pos % 8
+            row = pos // 8
+            if destination ==0:
+                if self.pawns[rpawn].checkEmpty(row+1,col-1):
+                    self.board[row][col] = 0
+                    self.board[row+1][col-1] = rpawn
+                    self.pawns[rpawn].update(row+1,col-1)
+                    found = True
+                    self.HumanView()
+                else:
+                    pass
+            elif destination ==1:
+                if self.pawns[rpawn].checkEmpty(row+1,col+1):
+                    self.board[row][col] = 0
+                    self.board[row + 1][col + 1] = rpawn
+                    self.pawns[rpawn].update(row + 1, col + 1)
+                    found = True
+                    self.HumanView()
+                else:
+                    pass

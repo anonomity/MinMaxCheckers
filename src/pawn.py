@@ -12,8 +12,6 @@ class pawn():
         self.posBoard = posBoard
 
     def checkEmpty(self,row,col):
-
-
         if self.gameboard[row][col]==0:
             return 1
         elif self.gameboard[row][col]!=0:
@@ -60,7 +58,12 @@ class pawn():
                 else:
                     print("unable to move to that position")
 
-        return self.gameboard,self.posBoard
+
+    def update(self,row,col):
+        newPosition =self.posBoard[row][col]
+        self.pos = newPosition
+    def getPos(self):
+        return self.pos
 
     def jump(self,destination,amount):
         pass
