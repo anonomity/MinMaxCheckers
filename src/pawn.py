@@ -10,6 +10,8 @@ class pawn():
         self.gameboard = gameboard
         self.number = number
         self.posBoard = posBoard
+        king = 0
+        self.king = king
 
     def checkEmpty(self,row,col):
 
@@ -101,3 +103,18 @@ class pawn():
             else:
                 print("unable to move to that location\n")
 
+    def checkForKing(self):
+        row = self.pos // 8
+        king = False
+        if self.human == 1:
+            if row ==0:
+                self.king = 1
+                return True
+            else:
+                pass
+        elif self.human ==0:
+            if row ==7:
+                self.king =1
+                return True
+            else:
+                pass

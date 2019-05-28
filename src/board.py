@@ -104,7 +104,10 @@ class board():
         for i in range(64):
             col = pos % 8
             row = pos // 8
-            if (humanView[row][col] < 13) & (humanView[row][col] != 0) :
+            pawnNum =humanView[row][col]
+            if self.pawns[pawnNum-1].checkForKing():
+                humanView[row][col] = 9915
+            elif (humanView[row][col] < 13) & (humanView[row][col] != 0) :
 
                 humanView[row][col]=69
                 pos+=1
@@ -124,6 +127,7 @@ class board():
     def jump(self,piece, direction, amount):
         piece = self.pawns[piece-1]
         piece.jump(direction,amount)
+        #self.piece.checkForKing()
 
     def printPawns(self):
         for i in range(self.pawns.__len__()):
@@ -132,7 +136,16 @@ class board():
     def mov(self,number,dir):
         piece = self.pawns[number-1]
         piece.mov(dir)
+        #piece.checkForKing()
         self.HumanView()
+
+
+    def checkKing(self,pawn):
+        if self.pawns[pawn-1].checkForKing():
+            return True
+        else:
+            return False
+
 
     def AiMove(self):
         found = False
@@ -143,7 +156,9 @@ class board():
             col = pos % 8
             row = pos // 8
             if destination ==0:
-                if self.pawns[rpawn-1].checkEmpty(row+1,col-1):
+                if ((row+1) > 7) | ((col - 1) < 0):
+                    pass
+                elif self.pawns[rpawn-1].checkEmpty(row+1,col-1):
                     self.board[row][col] = 0
                     self.board[row+1][col-1] = rpawn
                     self.pawns[rpawn-1].update(row+1,col-1)
@@ -151,6 +166,7 @@ class board():
                     self.HumanView()
                 #check if human is there so it can eat
                 elif self.pawns[rpawn-1].checkHuman(row+1,col-1):
+
                     #check if space is empty
                     if self.pawns[rpawn-1].checkEmpty(row+2,col-2):
                         self.pawns[rpawn - 1].update(row+2,col-2)
@@ -162,7 +178,9 @@ class board():
                 else:
                     pass
             elif destination ==1:
-                if self.pawns[rpawn-1].checkEmpty(row+1,col+1):
+                if ((row+1) > 7) | ((col + 1) > 7):
+                    pass
+                elif self.pawns[rpawn-1].checkEmpty(row+1,col+1):
                     self.board[row][col] = 0
                     self.board[row + 1][col + 1] = rpawn
                     self.pawns[rpawn-1].update(row + 1, col + 1)
@@ -178,3 +196,4 @@ class board():
                         pass
                 else:
                     pass
+        #self.pawns[rpawn-1].checkForKing()
