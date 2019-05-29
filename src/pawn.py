@@ -20,6 +20,8 @@ class pawn():
         elif self.gameboard[row][col]!=0:
             return 0
 
+#TODO: move functionality is faulty when getting to king place
+#TODO: also once created duplicate when moved piece
     def mov(self,destination):
         col = self.pos % 8
         row = self.pos // 8
@@ -32,17 +34,21 @@ class pawn():
                     self.gameboard[row - 1][col - 1] = self.number
                     p = self.posBoard[row - 1][col - 1]
                     self.pos = p
-
                 else:
                     print("unable to move to that position")
+
             elif destination ==1:
                 if self.checkEmpty(row-1,col+1):
                     self.gameboard[row][col] = 0
                     self.gameboard[row - 1][col + 1] = self.number
                     p = self.posBoard[row - 1][col + 1]
                     self.pos = p
+
                 else:
                     print("unable to move to that position")
+
+
+
         elif self.human ==0:
             if destination == 0:
                 if self.checkEmpty(row+1,col-1):
@@ -52,6 +58,7 @@ class pawn():
                     self.pos = p
                 else:
                     print("unable to move to that position")
+
             elif destination == 1:
                 if self.checkEmpty(row + 1, col +1):
                     self.gameboard[row][col] = 0
@@ -62,12 +69,16 @@ class pawn():
                     print("unable to move to that position")
 
 
+
     def update(self,row,col):
         newPosition =self.posBoard[row][col]
         self.pos = newPosition
 
     def getPos(self):
         return self.pos
+
+    def getNum(self):
+        return self.number
 
     def checkOpponent(self, row, col):
         if self.gameboard[row][col] == 0:
@@ -81,6 +92,7 @@ class pawn():
         elif self.gameboard[row][col] > 12:
             return 1
 
+#TODO: Add Polyjump function for human and AI
     def jump(self,destination,amount):
         col = self.pos % 8
         row = self.pos // 8
@@ -93,6 +105,7 @@ class pawn():
                 self.pos = p
             else:
                 print("unable to move to that location\n")
+
         elif destination ==1:
             if (self.checkEmpty(row - 2, col + 2)) & (self.checkOpponent(row - 1, col + 1)):
                 self.gameboard[row][col] = 0

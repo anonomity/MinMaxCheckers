@@ -5,6 +5,7 @@ import random
 
 class board():
 
+
     def __init__(self):
         pos = 0
         col = pos % 8
@@ -98,6 +99,11 @@ class board():
                         pos += 1
 
 
+
+    def returnPawns(self):
+        return self.pawns
+
+    #TODO: test king functionality
     def HumanView(self):
         pos = 0
         humanView = copy.deepcopy(self.board)
@@ -122,6 +128,7 @@ class board():
 
     def updateBoard(self,board):
         self.board = board
+
 
 
     def jump(self,piece, direction, amount):
@@ -197,3 +204,41 @@ class board():
                 else:
                     pass
         #self.pawns[rpawn-1].checkForKing()
+
+
+    def boardState(self, human):
+        count = self.countPawns()
+        # if human = 1:
+        #     count[0]
+        pieceCount = 0
+        kingCount = 0
+        positionCount = 0
+        return pieceCount + kingCount+ positionCount
+
+    def countPawns(self):
+        pos = 0
+        col = pos % 8
+        row = pos // 8
+        aiCount = 0
+        humanCount = 0
+        for i in range(64):
+            if (self.board[row][col] < 13) & (self.board[row][col] > 0):
+                aiCount+=1
+            elif self.board[row][col] > 12:
+                humanCount+=1
+        return humanCount,aiCount
+
+    def printScores(self):
+        score = self.countPawns()
+        print("Player1 count:" + str(score[0]) + "Player2 count: " + str(score[1]))
+
+    def gameOver(self):
+        gameover = False
+        score = self.countPawns()
+        if (score[0] ==0) | (score[1] ==0):
+            return True
+        else:
+            return True
+
+    def printScores(self):
+        pass
