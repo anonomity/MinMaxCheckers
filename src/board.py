@@ -103,16 +103,17 @@ class board():
     def returnPawns(self):
         return self.pawns
 
-    #TODO: test king functionality
+    #TODO: king funct good but then can't move
     def HumanView(self):
         pos = 0
         humanView = copy.deepcopy(self.board)
         for i in range(64):
             col = pos % 8
             row = pos // 8
-            pawnNum =humanView[row][col]
+            pawnNum =self.board[row][col]
             if self.pawns[pawnNum-1].checkForKing():
-                humanView[row][col] = 9915
+                humanView[row][col] = 99
+                pos+=1
             elif (humanView[row][col] < 13) & (humanView[row][col] != 0) :
 
                 humanView[row][col]=69
@@ -173,9 +174,10 @@ class board():
                     self.HumanView()
                 #check if human is there so it can eat
                 elif self.pawns[rpawn-1].checkHuman(row+1,col-1):
-
+                    if ((row+2) > 7) | ((col - 2) < 0):
+                        pass
                     #check if space is empty
-                    if self.pawns[rpawn-1].checkEmpty(row+2,col-2):
+                    elif self.pawns[rpawn-1].checkEmpty(row+2,col-2):
                         self.pawns[rpawn - 1].update(row+2,col-2)
                         self.board[row][col] = 0
                         self.board[row + 1][col - 1] = 0
@@ -194,7 +196,9 @@ class board():
                     found = True
                     self.HumanView()
                 elif self.pawns[rpawn-1].checkHuman(row+1,col+1):
-                    if self.pawns[rpawn - 1].checkEmpty(row + 2, col + 2):
+                    if ((row+2) > 7) | ((col + 2) > 7):
+                        pass
+                    elif self.pawns[rpawn - 1].checkEmpty(row + 2, col + 2):
                         self.pawns[rpawn - 1].update(row + 2, col + 2)
                         self.board[row][col] = 0
                         self.board[row + 1][col + 1] = 0
@@ -222,15 +226,21 @@ class board():
         aiCount = 0
         humanCount = 0
         for i in range(64):
+            col = pos % 8
+            row = pos // 8
             if (self.board[row][col] < 13) & (self.board[row][col] > 0):
                 aiCount+=1
+                pos+=1
             elif self.board[row][col] > 12:
                 humanCount+=1
+                pos += 1
+            else:
+                pos+=1
         return humanCount,aiCount
 
     def printScores(self):
         score = self.countPawns()
-        print("Player1 count:" + str(score[0]) + "Player2 count: " + str(score[1]))
+        print("Player1 count:" + str(score[0]) + " "+ "Player2 count: " + str(score[1]))
 
     def gameOver(self):
         gameover = False
@@ -240,5 +250,3 @@ class board():
         else:
             return True
 
-    def printScores(self):
-        pass

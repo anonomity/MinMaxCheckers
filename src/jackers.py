@@ -89,6 +89,7 @@ if __name__ == "__main__":
     # Ai = Player(0,gameboard,pawns)
     # play(gameboard)
     while end == False:
+        gameboard.printScores()
         piece = input("Which piece you want to move\n")
         print(" ")
 
@@ -102,6 +103,8 @@ if __name__ == "__main__":
             gameboard.jump(int(piece), int(dir), int(amount))
         else:
             gameboard.mov(int(piece), direction)
+        gameboard.printScores()
+        print("AI turn to move")
         gameboard.AiMove()
 
 

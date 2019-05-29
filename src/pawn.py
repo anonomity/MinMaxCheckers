@@ -12,7 +12,7 @@ class pawn():
         self.posBoard = posBoard
         king = 0
         self.king = king
-
+#TODO 14 and 13 are faulty 15
     def checkEmpty(self,row,col):
 
         if self.gameboard[row][col]==0:
@@ -21,7 +21,7 @@ class pawn():
             return 0
 
 #TODO: move functionality is faulty when getting to king place
-#TODO: also once created duplicate when moved piece
+
     def mov(self,destination):
         col = self.pos % 8
         row = self.pos // 8
@@ -29,7 +29,9 @@ class pawn():
 
         if self.human == 1:
             if destination ==0:
-                if self.checkEmpty(row-1,col-1):
+                if ((row-1) < 0) | ((col - 1) < 0):
+                    pass
+                elif self.checkEmpty(row-1,col-1):
                     self.gameboard[row][col] = 0
                     self.gameboard[row - 1][col - 1] = self.number
                     p = self.posBoard[row - 1][col - 1]
@@ -38,7 +40,9 @@ class pawn():
                     print("unable to move to that position")
 
             elif destination ==1:
-                if self.checkEmpty(row-1,col+1):
+                if ((row - 1) < 0) | ((col + 1) > 7):
+                    pass
+                elif self.checkEmpty(row-1,col+1):
                     self.gameboard[row][col] = 0
                     self.gameboard[row - 1][col + 1] = self.number
                     p = self.posBoard[row - 1][col + 1]
@@ -51,7 +55,9 @@ class pawn():
 
         elif self.human ==0:
             if destination == 0:
-                if self.checkEmpty(row+1,col-1):
+                if ((row + 1) > 7) | ((col - 1) < 0):
+                    pass
+                elif self.checkEmpty(row+1,col-1):
                     self.gameboard[row][col] = 0
                     self.gameboard[row + 1][col - 1] = self.number
                     p = self.posBoard[row + 1][col - 1]
@@ -60,7 +66,9 @@ class pawn():
                     print("unable to move to that position")
 
             elif destination == 1:
-                if self.checkEmpty(row + 1, col +1):
+                if ((row + 1) > 7) | ((col + 1) > 7):
+                    pass
+                elif self.checkEmpty(row + 1, col +1):
                     self.gameboard[row][col] = 0
                     self.gameboard[row + 1][col + 1] = self.number
                     p =  self.posBoard[row + 1][col + 1]
@@ -96,25 +104,49 @@ class pawn():
     def jump(self,destination,amount):
         col = self.pos % 8
         row = self.pos // 8
-        if destination == 0:
-            if (self.checkEmpty(row-2,col-2)) & (self.checkOpponent(row-1,col-1)):
-                self.gameboard[row][col] = 0
-                self.gameboard[row - 1][col - 1] = 0
-                self.gameboard[row - 2][col - 2] = self.number
-                p = self.posBoard[row - 2][col - 2]
-                self.pos = p
-            else:
-                print("unable to move to that location\n")
+        count = 0
+        if amount ==1:
+            if destination == 0:
+                if (self.checkEmpty(row-2,col-2)) & (self.checkOpponent(row-1,col-1)):
+                    self.gameboard[row][col] = 0
+                    self.gameboard[row - 1][col - 1] = 0
+                    self.gameboard[row - 2][col - 2] = self.number
+                    p = self.posBoard[row - 2][col - 2]
+                    self.pos = p
+                else:
+                    print("unable to move to that location\n")
 
-        elif destination ==1:
-            if (self.checkEmpty(row - 2, col + 2)) & (self.checkOpponent(row - 1, col + 1)):
-                self.gameboard[row][col] = 0
-                self.gameboard[row-1][col+1] = 0
-                self.gameboard[row - 2][col + 2] = self.number
-                p = self.posBoard[row - 2][col - 2]
-                self.pos = p
-            else:
-                print("unable to move to that location\n")
+            elif destination ==1:
+                if (self.checkEmpty(row - 2, col + 2)) & (self.checkOpponent(row - 1, col + 1)):
+                    self.gameboard[row][col] = 0
+                    self.gameboard[row-1][col+1] = 0
+                    self.gameboard[row - 2][col + 2] = self.number
+                    p = self.posBoard[row - 2][col - 2]
+                    self.pos = p
+                else:
+                    print("unable to move to that location\n")
+        else:
+            for i in range(amount):
+                col = self.pos % 8
+                row = self.pos // 8
+                if ((row - 2) < 0) | ((col - 2) < 0):
+                    pass
+                elif (self.checkEmpty(row-2,col-2)) & (self.checkOpponent(row-1,col-1)):
+                    self.gameboard[row][col] = 0
+                    self.gameboard[row - 1][col - 1] = 0
+                    self.gameboard[row - 2][col - 2] = self.number
+                    p = self.posBoard[row - 2][col - 2]
+                    self.pos = p
+                    count+=1
+                elif ((col + 2) > 7 ):
+                    pass
+                elif (self.checkEmpty(row - 2, col + 2)) & (self.checkOpponent(row - 1, col + 1)):
+                    self.gameboard[row][col] = 0
+                    self.gameboard[row-1][col+1] = 0
+                    self.gameboard[row - 2][col + 2] = self.number
+                    p = self.posBoard[row - 2][col - 2]
+                    self.pos = p
+                    count += 1
 
     def checkForKing(self):
         row = self.pos // 8
